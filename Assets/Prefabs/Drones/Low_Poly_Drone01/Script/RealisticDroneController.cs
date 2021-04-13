@@ -18,14 +18,30 @@ public class RealisticDroneController : MonoBehaviour
     public float power03;
     public float power04;
 
+    //public GameObject power01_bar;
+    //public GameObject power02_bar;
+    //public GameObject power03_bar;
+    //public GameObject power04_bar;
+
+
+    private Vector3 init_pos;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        init_pos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
+    {
+        //power01_bar.transform.localScale = new Vector3(1, power01, 1);
+        //power02_bar.transform.localScale = new Vector3(1, power02, 1);
+        //power03_bar.transform.localScale = new Vector3(1, power03, 1);
+        //power04_bar.transform.localScale = new Vector3(1, power04, 1);
+    }
+
+    void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.A))
         {
@@ -59,6 +75,9 @@ public class RealisticDroneController : MonoBehaviour
             //propeller02.transform.rotation = new Quaternion();
             //propeller03.transform.rotation = new Quaternion();
             //propeller04.transform.rotation = new Quaternion();
+
+            transform.position = init_pos;
+            gameObject.GetComponent<Rigidbody>().velocity = new Vector3();
         }
         
         propeller01.transform.Rotate(new Vector3(0, 0, power01 * 100f));

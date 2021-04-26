@@ -26,6 +26,8 @@ public class RealisticDroneController : MonoBehaviour
     //public GameObject power04_bar;
 
 
+    private bool isSlowMotion;
+
     private Vector3 init_pos;
 
     // Start is called before the first frame update
@@ -34,6 +36,8 @@ public class RealisticDroneController : MonoBehaviour
         init_pos = transform.position;
 
         drone_rig = gameObject.GetComponent<Rigidbody>();
+
+        isSlowMotion = false;
     }
 
     // Update is called once per frame
@@ -62,19 +66,22 @@ public class RealisticDroneController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Physics.gravity = Physics.gravity * 0.1f;
-            drone_rig.velocity = drone_rig.velocity * 0.1f;
-            drone_rig.angularVelocity = drone_rig.angularVelocity * 0.1f;
-            power_multiplier *= 0.1f;
-            deceleration_multiplier *= 0.1f;
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            Physics.gravity = Physics.gravity * 10f;
-            drone_rig.velocity = drone_rig.velocity * 10f;
-            drone_rig.angularVelocity = drone_rig.angularVelocity * 10f;
-            power_multiplier *= 10f;
-            deceleration_multiplier *= 10f;
+            isSlowMotion = !isSlowMotion;
+            if (isSlowMotion)
+            {
+                Physics.gravity = Physics.gravity * 0.1f;
+                drone_rig.velocity = drone_rig.velocity * 0.1f;
+                drone_rig.angularVelocity = drone_rig.angularVelocity * 0.1f;
+                power_multiplier *= 0.25f;
+                deceleration_multiplier *= 0.25f;
+            } else
+            {
+                Physics.gravity = Physics.gravity * 10f;
+                drone_rig.velocity = drone_rig.velocity * 10f;
+                drone_rig.angularVelocity = drone_rig.angularVelocity * 10f;
+                power_multiplier *= 4;
+                deceleration_multiplier *= 4;
+            }
         }
     }
 
@@ -121,7 +128,7 @@ public class RealisticDroneController : MonoBehaviour
         //propeller02.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power02_delta, 0));
         //propeller03.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power03_delta, 0));
         //propeller04.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power04_delta, 0));
-        propeller01.transform.Rotate(new Vector3(0, 0, power02 * 100f));
+        propeller01.transform.Rotate(new Vector3(0, 0, power01 * 100f));
         propeller02.transform.Rotate(new Vector3(0, 0, power02 * 100f));
         propeller03.transform.Rotate(new Vector3(0, 0, power03 * 100f));
         propeller04.transform.Rotate(new Vector3(0, 0, power04 * 100f));

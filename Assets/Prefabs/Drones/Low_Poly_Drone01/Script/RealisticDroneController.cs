@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class RealisticDroneController : MonoBehaviour
 {
-
+    private GameData game_data;
+    
     public GameObject propeller01;
     public GameObject propeller02;
     public GameObject propeller03;
@@ -20,6 +21,8 @@ public class RealisticDroneController : MonoBehaviour
     public float power03;
     public float power04;
 
+    public float air_resistance;
+
     //public GameObject power01_bar;
     //public GameObject power02_bar;
     //public GameObject power03_bar;
@@ -33,6 +36,8 @@ public class RealisticDroneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        game_data = GameObject.Find("GameData").GetComponent<GameData>();
+
         init_pos = transform.position;
 
         drone_rig = gameObject.GetComponent<Rigidbody>();
@@ -60,8 +65,13 @@ public class RealisticDroneController : MonoBehaviour
             //propeller03.transform.rotation = new Quaternion();
             //propeller04.transform.rotation = new Quaternion();
 
-            transform.position = init_pos;
+            transform.position = game_data.Player_last_checkpoint.position;
             drone_rig.velocity = new Vector3();
+        }
+
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            transform.rotation = new Quaternion();
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -124,20 +134,28 @@ public class RealisticDroneController : MonoBehaviour
         }
 
 
-        //propeller01.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power01_delta, 0));
-        //propeller02.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power02_delta, 0));
-        //propeller03.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power03_delta, 0));
-        //propeller04.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power04_delta, 0));
+        //propeller01.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power01_delta * 10000, 0));
+        //propeller02.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power02_delta * 10000 - propeller02.GetComponent<Rigidbody>().angularVelocity.z * 100, 0));
+        //propeller03.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power03_delta * 10000 - propeller03.GetComponent<Rigidbody>().angularVelocity.z * 100, 0));
+        //propeller04.GetComponent<Rigidbody>().AddTorque(new Vector3(0, power04_delta * 10000 - propeller04.GetComponent<Rigidbody>().angularVelocity.z * 100, 0));
+
         propeller01.transform.Rotate(new Vector3(0, 0, power01 * 100f));
         propeller02.transform.Rotate(new Vector3(0, 0, power02 * 100f));
         propeller03.transform.Rotate(new Vector3(0, 0, power03 * 100f));
         propeller04.transform.Rotate(new Vector3(0, 0, power04 * 100f));
 
         // use delta rotation for better physics
+        //drone_rig.AddForceAtPosition(propeller01.GetComponent<Rigidbody>().angularVelocity.z * propeller01.transform.forward, propeller01.transform.position);
+        //drone_rig.AddForceAtPosition(propeller02.GetComponent<Rigidbody>().angularVelocity.z * propeller02.transform.forward, propeller02.transform.position);
+        //drone_rig.AddForceAtPosition(propeller03.GetComponent<Rigidbody>().angularVelocity.z * propeller03.transform.forward, propeller03.transform.position);
+        //drone_rig.AddForceAtPosition(propeller04.GetComponent<Rigidbody>().angularVelocity.z * propeller04.transform.forward, propeller04.transform.position);
+
+
         drone_rig.AddForceAtPosition(power01 * propeller01.transform.forward, propeller01.transform.position);
         drone_rig.AddForceAtPosition(power02 * propeller02.transform.forward, propeller02.transform.position);
         drone_rig.AddForceAtPosition(power03 * propeller03.transform.forward, propeller03.transform.position);
         drone_rig.AddForceAtPosition(power04 * propeller04.transform.forward, propeller04.transform.position);
+
 
         power01 *= deceleration_multiplier;
         if (power01 <= 0.01f) power01 = 0;
@@ -147,5 +165,8 @@ public class RealisticDroneController : MonoBehaviour
         if (power03 <= 0.01f) power03 = 0;
         power04 *= deceleration_multiplier;
         if (power04 <= 0.01f) power04 = 0;
+
+        // air resistance
+        drone_rig.AddForce(-drone_rig.velocity * air_resistance);
     }
 }

@@ -9,13 +9,13 @@ Rigidbody:
   m_GameObject: {fileID: 6645681865815541173}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.5
+  m_Drag: 0.2
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &48946336409313945
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -51,6 +51,7 @@ MonoBehaviour:
   power02: 0
   power03: 0
   power04: 0
+  air_resistance: 0.5
 --- !u!1001 &5835360699840067812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -117,6 +118,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Low_Poly_Drone01 prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a15bd69720710394484e7ce2ba214109,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a15bd69720710394484e7ce2ba214109, type: 3}
